@@ -1,5 +1,6 @@
 import { nanoid } from "nanoid";
-import React, { createContext, useContext, useReducer } from "react";
+import React, { createContext, useContext, useEffect, useReducer } from "react";
+import { save } from "./api";
 import { DragItem } from "./DragItem";
 import {
   overrideItemAtIndex,
@@ -8,6 +9,7 @@ import {
   removeItemAtIndex,
   insertItemAtIndex,
 } from "./utils/arrayUtils";
+import { withData } from "./withData";
 interface Task {
   id: string;
   text: string;
@@ -180,14 +182,22 @@ const AppStateContext = createContext<AppStateContextProps>(
   {} as AppStateContextProps
 );
 
-export const AppStateProvider = ({ children }: React.PropsWithChildren<{}>) => {
-  const [state, dispatch] = useReducer(appStateReducer, appData);
-  return (
-    <AppStateContext.Provider value={{ state, dispatch }}>
-      {children}
-    </AppStateContext.Provider>
-  );
-};
+export const AppStateProvider = withData(
+  ({
+    children,
+    initialState,
+  }: React.PropsWithChildren<{ initialState: AppState }>) => {
+    const [state, dispatch] = useReducer(appStateReducer, initialState);
+    useEffect(() => {
+      save(state);
+    }, [state]);
+    return (
+      <AppStateContext.Provider value={{ state, dispatch }}>
+        {children}
+      </AppStateContext.Provider>
+    );
+  }
+);
 
 export const useAppState = () => {
   return useContext(AppStateContext);
