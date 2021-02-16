@@ -21,3 +21,17 @@ export function overriedItemAtItem<T>(
     return newItem;
   });
 }
+
+// Remove item at index from. Then insert the item at index to.
+export const moveItem = <T>(array: T[], from: number, to: number) => {
+  const item = array[from];
+  return insertItemAtIndex(removeItemAtIndex(array, from), item, to);
+};
+
+export function removeItemAtIndex<T>(array: T[], index: number) {
+  return [...array.slice(0, index), ...array.slice(index + 1)];
+}
+
+function insertItemAtIndex<T>(array: T[], item: T, to: number) {
+  return [...array.slice(0, to), item, ...array.slice(to)];
+}
