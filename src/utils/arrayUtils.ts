@@ -9,7 +9,7 @@ export const findItemIndexById = <T extends Item>(items: T[], id: string) => {
 // with the newItem value.
 // User type variable T to represent the type of the items in the array.
 // All items in our array should have the same type.ß
-export function overriedItemAtItem<T>(
+export function overrideItemAtIndex<T>(
   array: T[],
   newItem: T,
   targetIndex: number
@@ -32,6 +32,6 @@ export function removeItemAtIndex<T>(array: T[], index: number) {
   return [...array.slice(0, index), ...array.slice(index + 1)];
 }
 
-function insertItemAtIndex<T>(array: T[], item: T, to: number) {
+export function insertItemAtIndex<T>(array: T[], item: T, to: number) {
   return [...array.slice(0, to), item, ...array.slice(to)];
 }

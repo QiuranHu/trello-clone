@@ -6,4 +6,12 @@ export type ColumnDrageItem = {
   type: "COLUMN"; // Use type to know if it's a card or a column.
 };
 
-export type DragItem = ColumnDrageItem;
+export type CardDragItem = {
+  index: number;
+  id: string;
+  columnId: string;
+  text: string;
+  type: "CARD";
+};
+
+export type DragItem = ColumnDrageItem | CardDragItem;
