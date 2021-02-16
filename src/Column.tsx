@@ -6,14 +6,16 @@ import { Card } from "./Card";
 import { useItemDrag } from "./useItemDrag";
 import { useDrop } from "react-dnd";
 import { DragItem } from "./DragItem";
+import { isHidden } from "./utils/isHidden";
 
 interface ColumnProps {
   text: string;
   index: number;
   id: string;
+  isPreview?: boolean;
 }
 
-export const Column = ({ text, index, id }: ColumnProps) => {
+export const Column = ({ text, index, id, isPreview }: ColumnProps) => {
   const [, drop] = useDrop({
     accept: "COLUMN",
     // The hover callback is triggered when you move the dragged item above the drop target.
@@ -38,7 +40,11 @@ export const Column = ({ text, index, id }: ColumnProps) => {
   const { drag } = useItemDrag({ type: "COLUMN", id, index, text });
   drag(drop(ref));
   return (
-    <ColumnContainer ref={ref}>
+    <ColumnContainer
+      isPreview={isPreview}
+      ref={ref}
+      isHidden={isHidden(isPreview, state.draggedItem, "COLUMN", id)}
+    >
       <ColumnTitle>{text}</ColumnTitle>
       {state.lists[index].tasks.map((task, i) => (
         <Card text={task.text} key={task.id} />
